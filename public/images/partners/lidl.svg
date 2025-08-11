@@ -1,0 +1,5 @@
+<svg width="60" height="30" viewBox="0 0 60 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="15" r="12" fill="#FFD700" stroke="#0066CC" stroke-width="2"/>
+  <text x="12" y="20" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#E31E24">LIDL</text>
+  <circle cx="18" cy="12" r="1" fill="#FFD700"/>
+</svg>

@@ -9,6 +9,9 @@ import {
   HelpCircle,
   Settings,
   MessageSquare,
+  Home,
+  FileText,
+  Crown,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -44,24 +47,24 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   const menuItems = [
     {
       title: "Mijn advertentie",
-      icon: <User size={20} />,
+      icon: <Home size={20} />,
       href: "/profile/my-listings",
       progress: 67,
     },
     {
-      title: "Favorieten",
-      icon: <Heart size={20} />,
-      href: "/favorites",
-    },
-    {
-      title: "Berichten",
-      icon: <MessageSquare size={20} />,
-      href: "/messages",
+      title: "Upgrade naar Premium",
+      icon: <Crown size={20} />,
+      href: "/premium",
     },
     {
       title: "Help en support",
       icon: <HelpCircle size={20} />,
       href: "/help",
+    },
+    {
+      title: "Nieuws en tips",
+      icon: <FileText size={20} />,
+      href: "/news",
     },
     {
       title: "Instellingen",
@@ -120,11 +123,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                      className="h-full bg-primary-500 rounded-full transition-all duration-300"
                       style={{ width: `${item.progress}%` }}
                     ></div>
                   </div>
-                  <span className="text-xs font-medium text-blue-600 min-w-[32px]">
+                  <span className="text-xs font-medium text-primary-600 min-w-[32px]">
                     {item.progress}%
                   </span>
                 </div>
@@ -183,11 +186,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                      className="h-full bg-primary-500 rounded-full transition-all duration-300"
                       style={{ width: `${item.progress}%` }}
                     ></div>
                   </div>
-                  <span className="text-xs font-medium text-blue-600 min-w-[32px]">
+                  <span className="text-xs font-medium text-primary-600 min-w-[32px]">
                     {item.progress}%
                   </span>
                 </div>

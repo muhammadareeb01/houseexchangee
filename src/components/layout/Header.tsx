@@ -1,218 +1,328 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Bell, Home, ArrowLeft, Menu, X } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { Menu, X, Bell, ArrowLeft } from 'lucide-react';
+import ProfileMenu from '../profile/ProfileMenu';
 
 export default function Header() {
-  const pathname = usePathname();
   const router = useRouter();
-  const [viewMode, setViewMode] = useState(pathname === '/match' ? 'match' : 'zoeken');
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Hide header on messages pages
-  if (pathname.startsWith('/messages')) {
-    return null;
-  }
+  // Check if we're on a property detail page
+  const isPropertyDetailPage = pathname.startsWith('/property/') && pathname !== '/property';
+  
+  // Check if we're on a chat page
+  const isChatPage = pathname.startsWith('/messages/') && pathname !== '/messages';
+  
+  // Check if we're on a public page (homepage, how-it-works, etc.)
+  const isPublicPage = ['/', '/how-it-works', '/faq', '/about', '/auth/signin', '/register', '/verify'].includes(pathname);
+  
 
-  const isSearchOrMatchPage = pathname === '/search' || pathname === '/match';
-  const isPropertyDetailPage = pathname.startsWith('/property/');
-  const isHomepage = pathname === '/';
+  
+  // Check if we're on a property page (should show auth-style menu)
+  const isPropertyPage = pathname.startsWith('/property/');
 
-  const handleToggleChange = (mode: string) => {
-    setViewMode(mode);
-    if (mode === 'match' && pathname !== '/match') {
-      router.push('/match');
-    } else if (mode === 'zoeken' && pathname !== '/search') {
-      router.push('/search');
-    }
-  };
+  // Mock user state - replace with actual auth context
+  // For property pages and logged-in user pages, simulate logged in user to show correct menu
+  const loggedInPages = ['/dashboard', '/search', '/favorites', '/messages', '/notifications', '/settings', '/help', '/news', '/premium', '/profile'];
+  const isLoggedInPage = loggedInPages.some(page => pathname.startsWith(page));
+  const user = (isPropertyPage || isLoggedInPage) ? { name: "Mock User" } : null;
 
   const handleBackClick = () => {
-    router.push('/search');
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false); // Close mobile menu after navigation
+    router.back();
   };
 
   const handleMobileNavigation = (path: string) => {
     router.push(path);
-    setIsMobileMenuOpen(false); // Close mobile menu after navigation
+    setIsMobileMenuOpen(false);
   };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Hide header on chat pages
+  if (isChatPage) {
+    return null;
+  }
 
   return (
     <>
       <header className="sticky top-0 z-20 bg-white shadow-md h-16">
-      <div className="container mx-auto px-4 h-full flex justify-between items-center">
-        {isPropertyDetailPage ? (
-          // Layout for property detail pages
-          <>
-            {/* Left: Back button */}
-            <button 
-              onClick={handleBackClick}
-              className="flex items-center text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              <ArrowLeft className="mr-1" size={18} />
-              <span className="text-sm font-medium">Terug</span>
-            </button>
-            
-            {/* Center: Logo */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="container mx-auto px-4 h-full flex justify-between items-center">
+          {/* Always use normal layout for property pages - no special property detail layout */}
+          {false ? (
+            <>
+              {/* Left: Back button */}
+              <button 
+                onClick={handleBackClick}
+                className="flex items-center text-gray-600 hover:text-black transition-colors"
+              >
+                <ArrowLeft className="mr-1" size={18} />
+                <span className="text-sm font-medium">Terug</span>
+              </button>
+              
+              {/* Center: Logo */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <Link href="/" className="flex items-center h-full">
+                  <div className="flex items-center h-full">
+                    <img 
+                      src="/images/logos/logo.svg" 
+                      alt="mijnwoningruil.nl logo" 
+                      className="h-8 md:h-10"
+                    />
+                  </div>
+                </Link>
+              </div>
+              
+              {/* Right: Notifications */}
+              <button 
+                onClick={() => router.push('/notifications')}
+                className="relative cursor-pointer flex items-center justify-center h-10 w-10"
+              >
+                <div className="relative">
+                  <Bell className="h-6 w-6 text-gray-600" />
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold">3</span>
+                </div>
+              </button>
+            </>
+          ) : (
+            <>
+              {/* Logo */}
               <Link href="/" className="flex items-center h-full">
                 <div className="flex items-center h-full">
-                  <span className="font-bold text-lg text-blue-600">mijnwoningruil</span>
-                  <span className="font-bold text-lg text-gray-800">.nl</span>
+                  <img 
+                    src="/images/logos/logo.svg" 
+                    alt="mijnwoningruil.nl logo" 
+                    className="h-8 md:h-10"
+                  />
                 </div>
               </Link>
-            </div>
-            
-            {/* Right: Notifications */}
-            <div className="relative cursor-pointer flex items-center justify-center h-10 w-10">
-              <Bell className="h-6 w-6 text-gray-600" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-            </div>
-          </>
-        ) : (
-          // Original layout for other pages
-          <>
-            <Link href="/" className="flex items-center h-full">
-              <div className="flex items-center h-full">
-                <span className="font-bold text-lg md:text-2xl text-blue-600">mijnwoningruil</span>
-                <span className="font-bold text-lg md:text-2xl text-gray-800">.nl</span>
-              </div>
-            </Link>
-            
-            <div className="flex items-center space-x-4 h-full">
-                {isHomepage ? (
+              
+              {/* Navigation and buttons */}
+              <div className="flex items-center justify-between h-full w-full">
+                {isPublicPage ? (
                   <>
                     {/* Desktop navigation for homepage */}
-                    <nav className="hidden md:flex items-center space-x-6 h-full">
+                    <nav className="hidden md:flex items-center justify-center space-x-8 h-full flex-1">
                       <button
                         onClick={() => router.push('/search')}
-                        className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                        className="text-gray-700 hover:text-black font-medium transition-colors"
                       >
                         Aanbod
                       </button>
                       <button
-                        onClick={() => scrollToSection('how-it-works')}
-                        className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                        onClick={() => router.push('/how-it-works')}
+                        className="text-gray-700 hover:text-black font-medium transition-colors"
                       >
                         Hoe het werkt
                       </button>
                       <button
-                        onClick={() => router.push('/auth/signin')}
-                        className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                        onClick={() => router.push('/faq')}
+                        className="text-gray-700 hover:text-black font-medium transition-colors"
                       >
-                        Inloggen
+                        Veelgestelde vragen
                       </button>
                       <button
-                        onClick={() => router.push('/onboarding')}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                        onClick={() => router.push('/about')}
+                        className="text-gray-700 hover:text-black font-medium transition-colors"
                       >
-                        Plaats woning
+                        Over woningruil
                       </button>
                     </nav>
                     
-                    {/* Mobile menu button for homepage */}
-                    <button
-                      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                      className="md:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors"
-                    >
-                      {isMobileMenuOpen ? (
-                        <X className="h-6 w-6" />
+                    {/* Right side buttons */}
+                    <div className="hidden md:flex items-center space-x-4">
+                      {pathname === '/register' || pathname === '/verify' ? (
+                        <>
+                          <button
+                            onClick={() => router.push('/auth/signin')}
+                            className="bg-[#ffe361] text-black px-4 py-2 rounded-lg font-medium hover:bg-[#f5d95a] transition-colors"
+                          >
+                            Inloggen
+                          </button>
+                        </>
+                      ) : pathname === '/auth/signin' ? (
+                        <>
+                          <button
+                            onClick={() => router.push('/register')}
+                            className="bg-[#ffe361] text-black px-4 py-2 rounded-lg font-medium hover:bg-[#f5d95a] transition-colors"
+                          >
+                            Registreren
+                          </button>
+                        </>
                       ) : (
-                        <Menu className="h-6 w-6" />
+                        <>
+                          <button
+                            onClick={() => router.push('/auth/signin')}
+                            className="text-gray-700 hover:text-black font-medium transition-colors"
+                          >
+                            Inloggen
+                          </button>
+                          <button
+                            onClick={() => router.push('/onboarding')}
+                            className="bg-[#ffe361] text-black px-4 py-2 rounded-lg font-medium hover:bg-[#f5d95a] transition-colors"
+                          >
+                            Plaats woning
+                          </button>
+                        </>
                       )}
-                    </button>
+                    </div>
                   </>
-                ) : isSearchOrMatchPage ? (
-                <div className="bg-gray-200 p-1 rounded-full flex items-center h-10">
-                  <button
-                    className={`px-4 py-1 rounded-full text-sm font-medium transition-all h-8 flex items-center justify-center ${
-                      viewMode === 'zoeken' 
-                        ? 'bg-white text-blue-600 shadow-sm' 
-                        : 'text-gray-600'
-                    }`}
-                    onClick={() => handleToggleChange('zoeken')}
-                  >
-                    Zoeken
-                  </button>
-                  <button
-                    className={`px-4 py-1 rounded-full text-sm font-medium transition-all h-8 flex items-center justify-center ${
-                      viewMode === 'match' 
-                        ? 'bg-white text-blue-600 shadow-sm' 
-                        : 'text-gray-600'
-                    }`}
-                    onClick={() => handleToggleChange('match')}
-                  >
-                    Match
-                  </button>
-                </div>
-              ) : (
-                // Placeholder to maintain consistent header height when toggle isn't shown
-                <div className="h-10"></div>
-              )}
-              
-                {/* Hide notification bell on homepage */}
-                {!isHomepage && (
-              <div className="relative cursor-pointer flex items-center justify-center h-10 w-10">
-                <Bell className="h-6 w-6 text-gray-600" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                ) : user ? (
+                  <>
+                    {/* Desktop navigation for logged in users */}
+                    <nav className="hidden md:flex items-center justify-center space-x-8 h-full flex-1">
+                      <button
+                        onClick={() => router.push('/dashboard')}
+                        className={`text-gray-700 hover:text-black font-medium transition-colors ${pathname === '/dashboard' ? 'text-black' : ''}`}
+                      >
+                        Overzicht
+                      </button>
+                      <button
+                        onClick={() => router.push('/search')}
+                        className={`text-gray-700 hover:text-black font-medium transition-colors ${pathname === '/search' ? 'text-black' : ''}`}
+                      >
+                        Zoeken
+                      </button>
+                      <button
+                        onClick={() => router.push('/favorites')}
+                        className={`text-gray-700 hover:text-black font-medium transition-colors ${pathname === '/favorites' ? 'text-black' : ''}`}
+                      >
+                        Favorieten
+                      </button>
+                      <button
+                        onClick={() => router.push('/messages')}
+                        className={`text-gray-700 hover:text-black font-medium transition-colors ${pathname === '/messages' ? 'text-black' : ''}`}
+                      >
+                        Berichten
+                      </button>
+                    </nav>
+                    
+                    {/* Right side - notification bell and profile icon */}
+                    <div className="hidden md:flex items-center space-x-4">
+                      <button 
+                        onClick={() => router.push('/notifications')}
+                        className="relative cursor-pointer flex items-center justify-center h-10 w-10"
+                      >
+                        <div className="relative">
+                          <Bell className="h-6 w-6 text-gray-600" />
+                          <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold">3</span>
+                        </div>
+                      </button>
+                      <button
+                        onClick={toggleMenu}
+                        className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors relative"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#ffe361] flex items-center justify-center text-black font-semibold text-sm">
+                          JJ
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-black flex items-center justify-center">
+                          <Menu className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+                        </div>
+                      </button>
+                    </div>
+                  </>
+                ) : null}
               </div>
-                )}
-            </div>
-          </>
-        )}
-      </div>
-    </header>
+            </>
+          )}
 
-      {/* Mobile Menu Dropdown for Homepage */}
-      {isHomepage && isMobileMenuOpen && (
-        <div className="md:hidden fixed top-16 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-10">
-          <nav className="container mx-auto px-4 py-4">
-            <div className="flex flex-col space-y-4">
+          {/* Mobile menu buttons - positioned at the end for right alignment */}
+          {isPublicPage && (
+            <div className="md:hidden flex items-center ml-auto">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-gray-600 hover:text-black transition-colors"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
+            </div>
+          )}
+
+        </div>
+      </header>
+
+      {/* Mobile Menu Overlay - only for public pages */}
+      {isMobileMenuOpen && isPublicPage && (
+        <div className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden">
+          <div className="fixed top-16 left-0 right-0 bg-white shadow-lg">
+            <div className="p-4 space-y-4">
               <button
                 onClick={() => handleMobileNavigation('/search')}
-                className="text-left py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                className="block w-full text-left py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 Aanbod
               </button>
               <button
-                onClick={() => scrollToSection('how-it-works')}
-                className="text-left py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                onClick={() => handleMobileNavigation('/how-it-works')}
+                className="block w-full text-left py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 Hoe het werkt
               </button>
               <button
-                onClick={() => handleMobileNavigation('/auth/signin')}
-                className="text-left py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                onClick={() => handleMobileNavigation('/faq')}
+                className="block w-full text-left py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                Inloggen
+                Veelgestelde vragen
               </button>
               <button
-                onClick={() => handleMobileNavigation('/auth/signup')}
-                className="bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors text-center"
+                onClick={() => handleMobileNavigation('/about')}
+                className="block w-full text-left py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                Plaats woning
+                Over woningruil
               </button>
+              <div className="border-t pt-4 space-y-2">
+                {pathname === '/register' || pathname === '/verify' ? (
+                  <button
+                    onClick={() => handleMobileNavigation('/auth/signin')}
+                    className="block w-full text-left py-3 px-4 bg-[#ffe361] text-black rounded-lg font-medium hover:bg-[#f5d95a] transition-colors"
+                  >
+                    Inloggen
+                  </button>
+                ) : pathname === '/auth/signin' ? (
+                  <button
+                    onClick={() => handleMobileNavigation('/register')}
+                    className="block w-full text-left py-3 px-4 bg-[#ffe361] text-black rounded-lg font-medium hover:bg-[#f5d95a] transition-colors"
+                  >
+                    Registreren
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleMobileNavigation('/auth/signin')}
+                      className="block w-full text-left py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      Inloggen
+                    </button>
+                    <button
+                      onClick={() => handleMobileNavigation('/onboarding')}
+                      className="block w-full text-left py-3 px-4 bg-[#ffe361] text-black rounded-lg font-medium hover:bg-[#f5d95a] transition-colors"
+                    >
+                      Plaats woning
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
-          </nav>
+          </div>
         </div>
       )}
 
-      {/* Overlay to close mobile menu when clicking outside */}
-      {isHomepage && isMobileMenuOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black bg-opacity-25 z-5 top-16"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+      {/* Profile Menu - Desktop */}
+      <ProfileMenu 
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        slideContent={false}
+      />
     </>
   );
 }

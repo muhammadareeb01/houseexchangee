@@ -120,7 +120,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
       {isOpenFromParent === undefined && (
         <button 
           onClick={toggleSidebar}
-          className="flex items-center gap-2 py-2 px-4 bg-gray-100 rounded-full hover:bg-gray-200 transition"
+          className="flex items-center gap-2 py-2 px-4 bg-[#ffe361] text-black rounded-full hover:bg-[#f5d95a] transition"
         >
           <Sliders className="h-4 w-4" />
           <span>Filters {hasActiveFilters ? `(${
@@ -141,7 +141,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 mt-3">
           {activeFilters.searchText && (
-            <div className="flex items-center gap-1 py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-sm">
+            <div className="flex items-center gap-1 py-1 px-3 bg-black text-[#ffe361] rounded-full text-sm">
               <span>Zoekterm: {activeFilters.searchText}</span>
               <button onClick={() => removeFilter('searchText', '')}>
                 <X className="h-3 w-3" />
@@ -150,7 +150,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
           )}
           
           {activeFilters.propertyTypes.length > 0 && (
-            <div className="flex items-center gap-1 py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-sm">
+            <div className="flex items-center gap-1 py-1 px-3 bg-black text-[#ffe361] rounded-full text-sm">
               <span>Type: {activeFilters.propertyTypes[0]}</span>
               <button onClick={() => removeFilter('propertyTypes', '')}>
                 <X className="h-3 w-3" />
@@ -159,7 +159,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
           )}
           
           {(activeFilters.priceRange[0] > 0 || activeFilters.priceRange[1] < 3000) && (
-            <div className="flex items-center gap-1 py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-sm">
+            <div className="flex items-center gap-1 py-1 px-3 bg-black text-[#ffe361] rounded-full text-sm">
               <span>Prijs: €{activeFilters.priceRange[0]} - €{activeFilters.priceRange[1] === 3000 ? '3000+' : activeFilters.priceRange[1]}</span>
               <button onClick={() => removeFilter('priceRange', '')}>
                 <X className="h-3 w-3" />
@@ -168,7 +168,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
           )}
           
           {(activeFilters.rooms[0] > 1 || activeFilters.rooms[1] < 6) && (
-            <div className="flex items-center gap-1 py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-sm">
+            <div className="flex items-center gap-1 py-1 px-3 bg-black text-[#ffe361] rounded-full text-sm">
               <span>Kamers: {activeFilters.rooms[0]} - {activeFilters.rooms[1] === 6 ? '6+' : activeFilters.rooms[1]}</span>
               <button onClick={() => removeFilter('rooms', '')}>
                 <X className="h-3 w-3" />
@@ -179,7 +179,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
           {activeFilters.features.map(feature => (
             <div 
               key={feature}
-              className="flex items-center gap-1 py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-sm"
+              className="flex items-center gap-1 py-1 px-3 bg-black text-[#ffe361] rounded-full text-sm"
             >
               <span>{feature}</span>
               <button onClick={() => removeFilter('features', feature)}>
@@ -222,7 +222,7 @@ const FilterPanel = ({ isOpenFromParent, setIsOpenFromParent }: FilterPanelProps
         <div className="sticky bottom-0 bg-white p-4 border-t border-gray-200">
           <button 
             onClick={toggleSidebar}
-            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-base"
+            className="w-full py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition font-medium text-base"
           >
             Toon resultaten
           </button>

@@ -4,6 +4,7 @@ import React, { createContext, useEffect, useState, useContext } from "react";
 import {
   signInWithPopup,
   GoogleAuthProvider,
+  FacebookAuthProvider,
   signOut as firebaseSignOut,
 } from "firebase/auth";
 import { User } from "firebase/auth";
@@ -13,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInWithFacebook: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -20,6 +22,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signInWithGoogle: async () => {},
+  signInWithFacebook: async () => {},
   signOut: async () => {},
 });
 
@@ -48,6 +51,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signInWithFacebook = async () => {
+    const provider = new FacebookAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Error signing in with Facebook:", error);
+    }
+  };
+
   const signOutUser = async () => {
     try {
       await firebaseSignOut(auth);
@@ -58,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, signInWithGoogle, signOut: signOutUser }}
+      value={{ user, loading, signInWithGoogle, signInWithFacebook, signOut: signOutUser }}
     >
       {children}
     </AuthContext.Provider>

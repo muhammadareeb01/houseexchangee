@@ -53,20 +53,6 @@ export default function MessagesPage() {
   // Sample conversations data
   const conversations = [
     {
-      id: 'group1',
-      name: '3-Hoeksruil',
-      participants: 'Jij, Maria en Peter',
-      lastMessage: 'Jij: Dinsdag zou voor mij perfect werken. Ik stel voor',
-      timestamp: '13:55',
-      unread: 0,
-      avatar: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-      online: false,
-      property: null,
-      isRead: true,
-      isGroup: true,
-      type: 'group'
-    },
-    {
       id: '1',
       name: 'Eva de Vries',
       lastMessage: 'Ja, dat klinkt goed! Zullen we dat doen?',
@@ -306,161 +292,11 @@ export default function MessagesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
-      {/* Blue Header - Sticky */}
-      <div className="sticky top-0 z-30 bg-blue-600 text-white h-16">
-        <div className="h-full flex items-center px-4">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center">
-              <button 
-                onClick={() => router.back()}
-                className="mr-3 p-1 hover:bg-blue-700 rounded-full transition-colors"
-              >
-                <ArrowLeft size={20} />
-              </button>
-              <h1 className="text-lg font-semibold">
-                Inbox
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Top-level Tab Navigation */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 z-20">
-        <div className="flex">
-          <button
-            onClick={() => setActiveTab('inbox')}
-            className={`flex-1 py-4 px-4 text-center font-medium transition-colors relative ${
-              activeTab === 'inbox' 
-                ? 'text-blue-600 border-b-2 border-blue-600' 
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
-          >
-            Inbox
-            {totalUnread > 0 && (
-              <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                {totalUnread}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab('matches')}
-            className={`flex-1 py-4 px-4 text-center font-medium transition-colors relative ${
-              activeTab === 'matches' 
-                ? 'text-blue-600 border-b-2 border-blue-600' 
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
-          >
-            Matches
-            {matches.length > 0 && (
-              <span className="ml-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                {matches.length}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab('requests')}
-            className={`flex-1 py-4 px-4 text-center font-medium transition-colors relative ${
-              activeTab === 'requests' 
-                ? 'text-blue-600 border-b-2 border-blue-600' 
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
-          >
-            Ruilverzoeken
-            {exchangeRequests.length > 0 && (
-              <span className="ml-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
-                {exchangeRequests.length}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
 
-      {/* Conditional Content Based on Active Tab */}
-      {activeTab === 'matches' ? (
-        renderMatchesView()
-      ) : activeTab === 'requests' ? (
-        // Ruilverzoeken content
-        <div className="bg-white">
-          <div className="p-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Ruilverzoeken</h2>
-            
-            {exchangeRequests.length > 0 ? (
-              <div className="space-y-4">
-                {exchangeRequests.map((request) => (
-                  <div key={request.id} className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-                        <Image
-                          src={request.avatar}
-                          alt={request.name}
-                          width={48}
-                          height={48}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="font-semibold text-gray-900">{request.name}</h3>
-                            <p className="text-sm text-gray-600 mt-1">
-                              {request.property}
-                            </p>
-                            <div className="flex items-center mt-2">
-                              <ArrowLeft className="h-4 w-4 text-gray-400 transform rotate-180" />
-                              <span className="text-xs text-gray-500 mx-2">Ruil met</span>
-                              <ArrowLeft className="h-4 w-4 text-gray-400" />
-                            </div>
-                            <p className="text-sm text-blue-600 mt-1">
-                              {request.yourProperty}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <span className={`text-xs px-2 py-1 rounded-full ${
-                              request.status === 'pending' 
-                                ? 'bg-yellow-100 text-yellow-800' 
-                                : 'bg-green-100 text-green-800'
-                            }`}>
-                              {request.status === 'pending' ? 'In afwachting' : 'Geaccepteerd'}
-                            </span>
-                            <p className="text-xs text-gray-500 mt-1">{request.timestamp}</p>
-                          </div>
-                        </div>
-                        
-                        {request.status === 'pending' && (
-                          <div className="flex space-x-2 mt-3">
-                            <button
-                              onClick={() => handleDeclineRequest(request.id)}
-                              className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
-                            >
-                              <X size={16} />
-                              <span>Weigeren</span>
-                            </button>
-                            <button
-                              onClick={() => handleAcceptRequest(request.id)}
-                              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
-                            >
-                              <Check size={16} />
-                              <span>Accepteren</span>
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <MessageSquareMore size={48} className="mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500 text-lg mb-2">Geen ruilverzoeken</p>
-                <p className="text-gray-400 text-sm">Je ontvangt hier verzoeken van andere gebruikers</p>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        // Inbox content
+
+
+      {/* Inbox Content */}
         <>
           {/* Search */}
           <div className="bg-white p-4 border-b border-gray-200">
@@ -471,7 +307,7 @@ export default function MessagesPage() {
                 placeholder="Zoeken..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
+                className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:bg-white"
               />
             </div>
           </div>
@@ -483,7 +319,7 @@ export default function MessagesPage() {
                 onClick={() => setSubTab('all')}
                 className={`flex-1 py-2 px-4 text-center font-medium transition-all duration-200 rounded-md text-sm ${
                   subTab === 'all' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
+                    ? 'bg-white text-gray-800 shadow-sm' 
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -493,7 +329,7 @@ export default function MessagesPage() {
                 onClick={() => setSubTab('unread')}
                 className={`flex-1 py-2 px-4 text-center font-medium transition-all duration-200 rounded-md text-sm relative ${
                   subTab === 'unread' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
+                    ? 'bg-white text-gray-800 shadow-sm' 
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -515,7 +351,7 @@ export default function MessagesPage() {
                 onClick={() => router.push(`/messages/${conversation.id}`)}
                 className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
                   index !== filteredConversations.length - 1 ? 'border-b border-gray-100' : ''
-                } ${!conversation.isRead ? 'bg-blue-50' : ''}`}
+                } ${!conversation.isRead ? 'bg-gray-100' : ''}`}
               >
                 <div className="flex items-start space-x-3">
                   {/* Avatar */}
@@ -545,35 +381,23 @@ export default function MessagesPage() {
                     <div className="flex items-start justify-between mb-1">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <h3 className={`font-medium ${
-                            conversation.isGroup ? 'text-purple-600' : 'text-gray-900'
-                          }`}>
+                          <h3 className="font-medium text-gray-900">
                             {conversation.name}
                           </h3>
-                          {conversation.type === 'directe_ruil' && (
-                            <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
-                              Directe ruil
-                            </span>
-                          )}
                         </div>
-                        
-                        {conversation.participants && (
-                          <p className="text-sm text-purple-600 mb-1">
-                            {conversation.participants}
-                          </p>
-                        )}
                         
                         {conversation.property && (
                           <p className="text-sm text-blue-600 mb-1">
                             {conversation.property}
                           </p>
                         )}
+
                       </div>
                       
                       <div className="flex items-center space-x-2 flex-shrink-0">
                         <span className="text-xs text-gray-500">{conversation.timestamp}</span>
                         {conversation.unread > 0 && (
-                          <div className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                          <div className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                             {conversation.unread}
                           </div>
                         )}
@@ -597,7 +421,6 @@ export default function MessagesPage() {
             )}
           </div>
         </>
-      )}
     </div>
   );
 }

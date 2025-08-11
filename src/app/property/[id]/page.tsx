@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { MapPin, Maximize2, Key, Home, ChevronLeft, ChevronRight, Heart, Eye, Calendar, User, Flag } from 'lucide-react';
+import { MapPin, Maximize2, Key, Home, ChevronLeft, ChevronRight, Heart, Eye, Calendar, User, Flag, X } from 'lucide-react';
 import ContactAdvertiser from '@/components/property/ContactAdvertiser';
 import FloatingContactButton from '@/components/property/FloatingContactButton';
 import MessageModal from '@/components/property/MessageModal';
@@ -69,7 +69,13 @@ const properties = [
     size: 58,
     imageUrls: [
       "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-      "https://images.unsplash.com/photo-1576941089067-2de3c901e126?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80"
+      "https://images.unsplash.com/photo-1576941089067-2de3c901e126?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://images.unsplash.com/photo-1604014237800-1c9102c219da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
     ],
     type: "Studio",
     matchScore: 87,
@@ -141,6 +147,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [favorite, setFavorite] = useState(false);
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [isPhotoGalleryOpen, setIsPhotoGalleryOpen] = useState(false);
 
   useEffect(() => {
     // In a real app, you would fetch the property data from an API
@@ -156,6 +163,14 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
   const handleCloseMessageModal = () => {
     setIsMessageModalOpen(false);
+  };
+
+  const handleOpenPhotoGallery = () => {
+    setIsPhotoGalleryOpen(true);
+  };
+
+  const handleClosePhotoGallery = () => {
+    setIsPhotoGalleryOpen(false);
   };
 
   if (loading) {
@@ -174,7 +189,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
           <p className="text-gray-600 mb-6">De woning die je zoekt bestaat niet of is niet meer beschikbaar.</p>
           <button 
             onClick={() => router.push('/search')}
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition"
           >
             Terug naar aanbod
           </button>
@@ -195,8 +210,9 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
   return (
     <div className="relative bg-gray-50">
-      {/* Property Images - Full-width over hele scherm */}
-      <div className="relative w-full h-[50vh] md:h-[70vh]">
+      {/* Property Images */}
+      {/* Mobile/Tablet: Carousel */}
+      <div className="relative w-full h-[50vh] md:h-[70vh] lg:hidden">
         {property.imageUrls && property.imageUrls.length > 0 && (
           <Image
             src={property.imageUrls[currentImageIndex]}
@@ -251,11 +267,92 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         )}
       </div>
 
+      {/* Desktop: Photo Grid */}
+      <div className="hidden lg:block">
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-4 gap-2 h-[400px] relative">
+            {/* Main large image (left side, 2 columns) */}
+            {property.imageUrls && property.imageUrls.length > 0 && (
+              <div className="col-span-2 row-span-2 relative rounded-lg overflow-hidden">
+                <Image
+                  src={property.imageUrls[0]}
+                  alt={`Property at ${property.address} - main image`}
+                  fill
+                  sizes="50vw"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-4 right-4 z-10">
+                  <button 
+                    onClick={() => setFavorite(!favorite)}
+                    className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-md hover:bg-white flex items-center justify-center"
+                    aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+                  >
+                    <Heart 
+                      size={20} 
+                      className={`${favorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+                    />
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {/* Top right images */}
+            {property.imageUrls && property.imageUrls.slice(1, 3).map((imageUrl: string, index: number) => (
+              <div key={index + 1} className="relative rounded-lg overflow-hidden">
+                <Image
+                  src={imageUrl}
+                  alt={`Property at ${property.address} - image ${index + 2}`}
+                  fill
+                  sizes="25vw"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))}
+            
+            {/* Bottom right images */}
+            {property.imageUrls && property.imageUrls.slice(3, 5).map((imageUrl: string, index: number) => (
+              <div key={index + 3} className="relative rounded-lg overflow-hidden">
+                <Image
+                  src={imageUrl}
+                  alt={`Property at ${property.address} - image ${index + 4}`}
+                  fill
+                  sizes="25vw"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))}
+            
+            {/* Alle foto's tonen button - bottom right corner */}
+            {property.imageUrls && property.imageUrls.length > 5 && (
+              <div className="absolute bottom-4 right-4 z-10">
+                <button 
+                  onClick={handleOpenPhotoGallery}
+                  className="bg-white px-4 py-2 rounded-lg font-medium text-gray-900 hover:bg-gray-100 transition-colors flex items-center gap-2 shadow-md"
+                >
+                  <span className="grid grid-cols-3 gap-1">
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                  </span>
+                  Alle foto's tonen
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-6">
         {/* Property Header */}
-        <div className="mb-4">
-          <h1 className="text-2xl font-semibold">{property.address}</h1>
-          <p className="text-gray-600">{property.location}</p>
+        <div className="mb-6">
+          <h1 className="text-2xl lg:text-3xl font-semibold">{property.address}</h1>
+          <p className="text-gray-600 text-lg">{property.location}</p>
           
           <div className="flex flex-wrap items-center text-sm text-gray-500 mt-2 border-t border-gray-200 pt-2">
             <div className="flex items-center mr-4">
@@ -287,74 +384,101 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <span className="font-medium">€ {property.price.toLocaleString('nl-NL')}/maand</span>
           </div>
         </div>
-        
-        {/* Contact Advertiser */}
-        <div className="mb-6">
-          <ContactAdvertiser 
-            name="Thomas" 
-            activeSince="15-03-2022" 
-            profileImage="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
-            propertyAddress={property.address}
-          />
-        </div>
-        
-        {/* Description */}
-        <div className="mb-8">
-          <h2 className="text-xl font-medium mb-3">Omschrijving</h2>
-          <p className="text-gray-700 leading-relaxed">{property.description}</p>
-        </div>
-        
-        {/* Property Features */}
-        <div className="mb-8">
-          <h2 className="text-xl font-medium mb-3">De woning</h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
-            <li>{property.type}</li>
-            <li>{property.rooms} slaapkamers</li>
-            <li>{property.size} m² woonoppervlak</li>
-          </ul>
-        </div>
-        
-        {/* Amenities */}
-        <div className="mb-8">
-          <h2 className="text-xl font-medium mb-3">Voorzieningen</h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
-            {property.amenities.map((amenity: string, index: number) => (
-              <li key={index}>{amenity}</li>
-            ))}
-          </ul>
-        </div>
-        
-        {/* Neighborhood */}
-        <div className="mb-8">
-          <h2 className="text-xl font-medium mb-3">De buurt</h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
-            {property.neighborhood.map((item: string, index: number) => (
-              <li key={index}>{item} (placeholder)</li>
-            ))}
-          </ul>
-        </div>
-        
-        {/* Location Details */}
-        <div className="mb-8">
-          <h2 className="text-xl font-medium mb-3">Ligging</h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
-            {property.location_details.map((item: string, index: number) => (
-              <li key={index}>{item} (placeholder)</li>
-            ))}
-          </ul>
-        </div>
-        
-        {/* Location Map */}
-        <div className="mb-4">
-          <h2 className="text-xl font-medium mb-3">Locatie</h2>
-          <p className="text-gray-700 mb-3">{property.address}, {property.location}</p>
-          <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-            <p className="text-gray-500">Kaartintegratie hier (bijv. Google Maps / OpenStreetMap)</p>
+
+        {/* Desktop Layout: 60%-40% columns */}
+        <div className="lg:flex lg:gap-8">
+          {/* Main Content (60% on desktop) */}
+          <div className="lg:w-[60%]">
+            {/* Contact Advertiser - Mobile only */}
+            <div className="mb-6 lg:hidden">
+              <ContactAdvertiser 
+                name="Thomas" 
+                activeSince="15-03-2022" 
+                profileImage="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
+                propertyAddress={property.address}
+              />
+            </div>
+            
+            {/* Description */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium mb-3">Omschrijving</h2>
+              <p className="text-gray-700 leading-relaxed">{property.description}</p>
+            </div>
+            
+            {/* Property Features */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium mb-3">De woning</h2>
+              <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
+                <li>{property.type}</li>
+                <li>{property.rooms} slaapkamers</li>
+                <li>{property.size} m² woonoppervlak</li>
+              </ul>
+            </div>
+            
+            {/* Amenities */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium mb-3">Voorzieningen</h2>
+              <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
+                {property.amenities.map((amenity: string, index: number) => (
+                  <li key={index}>{amenity}</li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Neighborhood */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium mb-3">De buurt</h2>
+              <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
+                {property.neighborhood.map((item: string, index: number) => (
+                  <li key={index}>{item} (placeholder)</li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Location Details */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium mb-3">Ligging</h2>
+              <ul className="list-disc list-inside text-gray-700 space-y-2 pl-1">
+                {property.location_details.map((item: string, index: number) => (
+                  <li key={index}>{item} (placeholder)</li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Location Map */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium mb-3">Locatie</h2>
+              <p className="text-gray-700 mb-3">{property.address}, {property.location}</p>
+              <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Kaartintegratie hier (bijv. Google Maps / OpenStreetMap)</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar (40% on desktop) */}
+          <div className="lg:w-[40%]">
+            {/* Contact Advertiser - Desktop only */}
+            <div className="hidden lg:block sticky top-24">
+              <ContactAdvertiser 
+                name="Thomas" 
+                activeSince="15-03-2022" 
+                profileImage="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
+                propertyAddress={property.address}
+              />
+              
+              {/* Report Advertisement - Desktop only */}
+              <div className="mt-6 flex justify-center">
+                <button className="flex items-center justify-center text-gray-500 text-sm hover:text-gray-700">
+                  <Flag size={14} className="mr-1" />
+                  <span>Deze advertentie rapporteren</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         
-        {/* Report Advertisement */}
-        <div className="flex justify-center mb-8">
+        {/* Report Advertisement - Mobile only */}
+        <div className="flex justify-center mb-8 mt-8 lg:hidden">
           <button className="flex items-center justify-center text-gray-500 text-sm hover:text-gray-700">
             <Flag size={14} className="mr-1" />
             <span>Deze advertentie rapporteren</span>
@@ -369,6 +493,85 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         propertyAddress={property?.address || ''}
         advertiserName="Thomas"
       />
+
+      {/* Photo Gallery Modal */}
+      {isPhotoGalleryOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Close button */}
+            <button
+              onClick={handleClosePhotoGallery}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+              aria-label="Close photo gallery"
+            >
+              <X size={24} className="text-white" />
+            </button>
+
+            {/* Photo counter */}
+            <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-sm px-3 py-2 rounded-lg">
+              <span className="text-white text-sm font-medium">
+                {currentImageIndex + 1} / {property.imageUrls?.length || 0}
+              </span>
+            </div>
+
+            {/* Main photo */}
+            <div className="relative w-full h-full max-w-4xl max-h-[80vh] mx-4">
+              {property.imageUrls && property.imageUrls[currentImageIndex] && (
+                <Image
+                  src={property.imageUrls[currentImageIndex]}
+                  alt={`Property at ${property.address} - image ${currentImageIndex + 1}`}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                />
+              )}
+            </div>
+
+            {/* Navigation arrows */}
+            {hasMultipleImages && (
+              <>
+                <button 
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={24} className="text-white" />
+                </button>
+                <button 
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={24} className="text-white" />
+                </button>
+              </>
+            )}
+
+            {/* Thumbnail strip at bottom */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex space-x-2 max-w-full overflow-x-auto px-4">
+              {property.imageUrls?.map((imageUrl: string, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
+                    currentImageIndex === index 
+                      ? 'border-white scale-110' 
+                      : 'border-white/30 hover:border-white/60'
+                  }`}
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={`Thumbnail ${index + 1}`}
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Floating Contact Button */}
       <FloatingContactButton onOpenModal={handleOpenMessageModal} />

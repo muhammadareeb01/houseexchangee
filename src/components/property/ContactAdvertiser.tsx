@@ -72,7 +72,7 @@ const ContactAdvertiser: React.FC<ContactAdvertiserProps> = ({
         
         <button 
           onClick={handleOpenModal}
-          className="flex items-center justify-center w-full gap-2 py-3 px-5 mt-5 mb-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                      className="flex items-center justify-center w-full gap-2 py-3 px-5 mt-5 mb-3 bg-black text-white rounded-full hover:bg-gray-800 transition"
         >
           <MessageCircle size={20} />
           <span className="font-medium">Stuur een bericht</span>

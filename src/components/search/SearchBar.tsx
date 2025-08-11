@@ -37,7 +37,7 @@ const SearchBar = ({ onFilterClick }: SearchBarProps) => {
       
       <button 
         onClick={onFilterClick}
-        className="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-lg hover:bg-blue-700 transition text-white"
+        className="flex items-center justify-center w-14 h-14 bg-[#ffe361] rounded-lg hover:bg-[#f5d95a] transition text-black"
         aria-label="Filter"
       >
         <Sliders className="h-6 w-6" />

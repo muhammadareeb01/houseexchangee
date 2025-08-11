@@ -15,16 +15,16 @@ const AdvertisementCompleteness: React.FC<AdvertisementCompletenessProps> = ({
   onImproveClick
 }) => {
   return (
-    <div className="bg-blue-50 rounded-xl p-6">
+    <div className="bg-gray-900 text-white rounded-xl p-6">
       <div className="mb-2 flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-blue-700">Advertentie Volledigheid</h2>
-        <span className="text-2xl font-bold text-blue-700">{completeness}%</span>
+        <h2 className="text-lg font-semibold text-white">Advertentie Volledigheid</h2>
+        <span className="text-2xl font-bold text-[#ffe361]">{completeness}%</span>
       </div>
       
       {/* Progress Bar */}
-      <div className="w-full h-3 bg-blue-100 rounded-full mb-4">
+      <div className="w-full h-3 bg-gray-700 rounded-full mb-4">
         <div 
-          className="h-full bg-blue-600 rounded-full" 
+          className="h-full bg-[#ffe361] rounded-full transition-all duration-300" 
           style={{ width: `${completeness}%` }}
         ></div>
       </div>
@@ -32,7 +32,7 @@ const AdvertisementCompleteness: React.FC<AdvertisementCompletenessProps> = ({
       <div className="text-right">
         <button 
           onClick={() => onImproveClick(propertyId)}
-          className="text-blue-600 hover:underline font-medium flex items-center justify-end ml-auto"
+          className="text-[#ffe361] hover:text-[#f5d95a] font-medium flex items-center justify-end ml-auto transition-colors"
         >
           Verbeter je advertentie <ChevronRight size={16} className="ml-1" />
         </button>

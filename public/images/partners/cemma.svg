@@ -1,0 +1,5 @@
+<svg width="80" height="30" viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="5" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FF9800">Cemma.</text>
+  <path d="M8 15 Q10 12 12 15" stroke="#FF9800" stroke-width="2" fill="none"/>
+  <circle cx="10" cy="14" r="1" fill="#FF9800"/>
+</svg>

@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/contexts/AuthContext";
 import PropertyListingCard from "@/components/property/PropertyListingCard";
 import PropertyCard from "@/components/search/PropertyCard";
 import { Eye, Heart, MessageCircle, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 /**
  * Dashboard Page
@@ -130,6 +131,29 @@ const recentActivity = [
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [isFirstTime, setIsFirstTime] = useState(true);
+  const [firstName, setFirstName] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      // Get first name from user object
+      // For now, always show "Kenneth" - later this will be: user.firstName || user.displayName || "Kenneth"
+      const userFirstName = "Kenneth";
+      setFirstName(userFirstName);
+
+      // Check if user has visited before
+      const hasVisitedBefore = localStorage.getItem(`dashboard_visited_${user.uid}`);
+      
+      if (hasVisitedBefore) {
+        setIsFirstTime(false);
+      } else {
+        // Mark as visited for next time
+        localStorage.setItem(`dashboard_visited_${user.uid}`, 'true');
+        setIsFirstTime(true);
+      }
+    }
+  }, [user]);
+
   console.log(user);
 
   return (
@@ -137,7 +161,7 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">
-          Welkom terug, {user?.email || "Gebruiker"}
+          {isFirstTime ? `Welkom, ${firstName}` : `Welkom terug, ${firstName}`}
         </h1>
         <p className="text-gray-600 mt-1">
           Hier is een overzicht van je woningruil activiteiten
@@ -170,6 +194,7 @@ export default function DashboardPage() {
               imageUrls={listing.imageUrls}
               type={listing.type}
               features={listing.features}
+              hideFeatures={true}
             />
           ))}
         </div>
@@ -184,8 +209,8 @@ export default function DashboardPage() {
               key={activity.id}
               className="flex items-center p-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
             >
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-4">
-                <activity.icon className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-full bg-[#ffe361]/20 flex items-center justify-center mr-4">
+                <activity.icon className="w-5 h-5 text-[#f5d95a]" />
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-900">

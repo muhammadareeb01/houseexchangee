@@ -544,13 +544,14 @@ export default function OnboardingPage() {
             
             <div className="mb-6">
               <div className="checkbox-item flex items-center mb-5 hover:bg-gray-200 transition-colors">
-                <input
-                  id="noPreferences"
-                  type="checkbox"
-                  className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  checked={noPreferences}
-                  onChange={handleNoPreferencesChange}
-                />
+                                    <input
+                      id="noPreferences"
+                      type="checkbox"
+                      className="h-5 w-5 border-gray-300 rounded"
+                      style={{ accentColor: '#000000' }}
+                      checked={noPreferences}
+                      onChange={handleNoPreferencesChange}
+                    />
                 <label htmlFor="noPreferences" className="ml-3 block text-base font-medium text-gray-700">
                   Ik heb geen specifieke voorkeuren voor mijn nieuwe woning
                 </label>
@@ -803,7 +804,8 @@ export default function OnboardingPage() {
                     <input
                       id="termsAccepted"
                       type="checkbox"
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 border-gray-300 rounded"
+                      style={{ accentColor: '#000000' }}
                       checked={termsAccepted}
                       onChange={(e) => setTermsAccepted(e.target.checked)}
                     />
@@ -820,7 +822,8 @@ export default function OnboardingPage() {
                     <input
                       id="privacyAccepted"
                       type="checkbox"
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 border-gray-300 rounded"
+                      style={{ accentColor: '#000000' }}
                       checked={privacyAccepted}
                       onChange={(e) => setPrivacyAccepted(e.target.checked)}
                     />

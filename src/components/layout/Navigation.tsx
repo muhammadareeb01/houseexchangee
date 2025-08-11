@@ -11,13 +11,16 @@ export default function Navigation() {
   const pathname = usePathname();
   const { isMenuOpen, setIsMenuOpen, toggleMenu } = useMenu();
   
-  // Hide navigation on homepage
-  if (pathname === '/') {
+  // Hide navigation on homepage and auth pages
+  const isHomepage = pathname === '/';
+  const isAuthPage = ['/auth/signin', '/auth/signup', '/register', '/verify'].includes(pathname);
+  
+  if (isHomepage || isAuthPage) {
     return null;
   }
   
   const navItems = [
-    { name: 'Home', path: '/', icon: <Home className="h-6 w-6" /> },
+    { name: 'Home', path: '/dashboard', icon: <Home className="h-6 w-6" /> },
     { name: 'Zoeken', path: '/search', icon: <Search className="h-6 w-6" /> },
     { name: 'Favorieten', path: '/favorites', icon: <Heart className="h-6 w-6" /> },
     { 
@@ -39,22 +42,24 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10 md:hidden">
         <div className="flex justify-between items-center px-2">
           {navItems.map((item) => (
             <Link 
               key={item.path}
               href={item.path} 
               className={`flex flex-col items-center py-2 px-3 ${
-                pathname === item.path ? 'text-blue-600' : 'text-gray-500'
+                pathname === item.path ? 'text-black' : 'text-gray-500'
               }`}
             >
-              <div className={pathname === item.path ? 'text-blue-600' : 'text-gray-500'}>
+              <div className={pathname === item.path ? 'text-black' : 'text-gray-500'}>
                 {item.icon}
               </div>
               <span className="text-xs mt-1">{item.name}</span>
             </Link>
           ))}
+          
+
           
           {/* Profile Button */}
           <button 
@@ -62,10 +67,10 @@ export default function Navigation() {
             className="flex flex-col items-center py-2 px-3 text-gray-500"
           >
             <div className="relative">
-              <div className="h-7 w-7 rounded-full bg-blue-600 flex items-center justify-center border border-blue-700 text-white font-semibold text-xs">
+              <div className="h-7 w-7 rounded-full bg-[#ffe361] flex items-center justify-center text-black font-semibold text-xs">
                 JJ
               </div>
-              <div className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-blue-500 flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-black flex items-center justify-center">
                 <Menu className="h-2.5 w-2.5 text-white" strokeWidth={3} />
               </div>
             </div>

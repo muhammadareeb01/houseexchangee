@@ -6,14 +6,12 @@ import Image from 'next/image';
 import { 
   Settings, 
   BarChart2, 
-  BarChart3,
   Power, 
   Trash2, 
   ChevronRight,
   Edit,
   MapPin,
   Home,
-  FileText,
   Camera,
   X,
   ArrowLeft,
@@ -376,10 +374,10 @@ function MyListingsContent() {
   const editOptions = [
     { title: 'Adres', icon: <MapPin size={20} />, description: 'Wijzig adres en locatie gegevens' },
     { title: 'Basisgegevens', icon: <Home size={20} />, description: 'Huurprijs, kamers, oppervlakte en type' },
-    { title: 'Woningdetails', icon: <FileText size={20} />, description: 'Beschrijving, voorzieningen en details' },
+    { title: 'Woningdetails', icon: <Settings size={20} />, description: 'Beschrijving, voorzieningen en details' },
     { title: "Foto's", icon: <Camera size={20} />, description: 'Upload en beheer woningfoto\'s' },
     { title: 'Ruilvoorkeuren', icon: <Home size={20} />, description: 'Wijzig ruilvoorkeuren' },
-    { title: 'Statistieken', icon: <BarChart3 size={20} />, description: 'Bekijk prestaties en statistieken' }
+    { title: 'Statistieken', icon: <BarChart2 size={20} />, description: 'Bekijk prestaties en statistieken' }
   ];
 
   const steps = [
@@ -415,6 +413,7 @@ function MyListingsContent() {
           showActionButtons={true}
           onToggleExchangeProcess={toggleExchangeProcess}
           onEditClick={handleEditClick}
+          isOwnListing={true}
         />
       </div>
       
@@ -422,7 +421,7 @@ function MyListingsContent() {
       <div className="space-y-3">
         {/* Edit Advertisement */}
         <button 
-          onClick={() => setShowEditOptionsModal(true)} 
+          onClick={() => router.push('/profile/edit')} 
           className="w-full flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:bg-gray-50 transition"
         >
           <div className="flex items-center">
@@ -432,20 +431,18 @@ function MyListingsContent() {
           <ChevronRight size={20} className="text-gray-400" />
         </button>
 
-        {/* Statistics */}
+        {/* Edit Exchange Preferences */}
         <button 
-          onClick={() => {
-            setCurrentEditStep('Statistieken');
-            setShowEditOptionsModal(true);
-          }} 
+          onClick={() => router.push('/profile/edit/ruilvoorkeuren')} 
           className="w-full flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:bg-gray-50 transition"
         >
           <div className="flex items-center">
-            <BarChart2 size={20} className="text-gray-500 mr-3" />
-            <span className="font-medium">Bekijk statistieken</span>
+            <Heart size={20} className="text-gray-500 mr-3" />
+            <span className="font-medium">Ruilvoorkeuren bewerken</span>
           </div>
           <ChevronRight size={20} className="text-gray-400" />
         </button>
+
         
         {/* Deactivate */}
         <button 
@@ -1404,7 +1401,7 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Appartement')}
                                   onChange={(e) => handleWoningtypeChange('Appartement', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 text-black border-gray-300 rounded focus:ring-[#ffe361]"
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Appartement</span>
                               </label>
@@ -1413,7 +1410,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Eengezinswoning')}
                                   onChange={(e) => handleWoningtypeChange('Eengezinswoning', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Eengezinswoning</span>
                               </label>
@@ -1422,7 +1420,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Vrijstaande woning')}
                                   onChange={(e) => handleWoningtypeChange('Vrijstaande woning', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Vrijstaande woning</span>
                               </label>
@@ -1431,7 +1430,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Twee-onder-een-kap')}
                                   onChange={(e) => handleWoningtypeChange('Twee-onder-een-kap', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Twee-onder-een-kap</span>
                               </label>
@@ -1440,7 +1440,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Tussenwoning')}
                                   onChange={(e) => handleWoningtypeChange('Tussenwoning', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Tussenwoning</span>
                               </label>
@@ -1449,7 +1450,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Hoekwoning')}
                                   onChange={(e) => handleWoningtypeChange('Hoekwoning', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Hoekwoning</span>
                               </label>
@@ -1458,7 +1460,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Studio')}
                                   onChange={(e) => handleWoningtypeChange('Studio', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Studio</span>
                               </label>
@@ -1467,7 +1470,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Maisonnette')}
                                   onChange={(e) => handleWoningtypeChange('Maisonnette', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Maisonnette</span>
                               </label>
@@ -1476,7 +1480,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Penthouse')}
                                   onChange={(e) => handleWoningtypeChange('Penthouse', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Penthouse</span>
                               </label>
@@ -1485,7 +1490,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Bungalow')}
                                   onChange={(e) => handleWoningtypeChange('Bungalow', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Bungalow</span>
                               </label>
@@ -1494,7 +1500,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Villa')}
                                   onChange={(e) => handleWoningtypeChange('Villa', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Villa</span>
                               </label>
@@ -1503,7 +1510,8 @@ function MyListingsContent() {
                                   type="checkbox"
                                   checked={formData.ruilvoorkeurenData.woningtypen.includes('Boerderij')}
                                   onChange={(e) => handleWoningtypeChange('Boerderij', e.target.checked)}
-                                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                  className="w-4 h-4 border-gray-300 rounded"
+                                  style={{ accentColor: '#000000' }}
                                 />
                                 <span className="ml-2 text-sm text-gray-700">Boerderij</span>
                               </label>

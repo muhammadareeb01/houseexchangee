@@ -15,6 +15,7 @@ import {
   Users,
   CreditCard
 } from 'lucide-react';
+import Footer from '@/components/layout/Footer';
 
 // FAQ data
 const faqData = [
@@ -42,7 +43,7 @@ const faqData = [
     questions: [
       {
         question: "Hoe maak ik een account aan?",
-        answer: "Klik op &apos;Registreren&apos; en vul je gegevens in. Je ontvangt een bevestigingsmail om je account te activeren."
+        answer: "Klik op 'Registreren' en vul je gegevens in. Je ontvangt een bevestigingsmail om je account te activeren."
       },
       {
         question: "Kan ik mijn profiel later aanpassen?",
@@ -60,7 +61,7 @@ const faqData = [
     questions: [
       {
         question: "Hoe plaats ik een advertentie?",
-        answer: "Ga naar je profiel en klik op &apos;Advertentie plaatsen&apos;. Vul alle gevraagde informatie in en voeg foto&apos;s toe voor het beste resultaat."
+        answer: "Ga naar je profiel en klik op 'Advertentie plaatsen'. Vul alle gevraagde informatie in en voeg foto's toe voor het beste resultaat."
       },
       {
         question: "Waarom is mijn advertentie niet zichtbaar?",
@@ -82,7 +83,7 @@ const faqData = [
       },
       {
         question: "Wat moet ik doen bij verdacht gedrag?",
-        answer: "Rapporteer verdacht gedrag direct via de &apos;Rapporteren&apos; knop. Ons team onderzoekt alle meldingen binnen 24 uur."
+        answer: "Rapporteer verdacht gedrag direct via de 'Rapporteren' knop. Ons team onderzoekt alle meldingen binnen 24 uur."
       },
       {
         question: "Zijn mijn gegevens veilig?",
@@ -135,211 +136,214 @@ export default function HelpPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
-      <div className="bg-blue-600 text-white py-8">
-        <div className="container mx-auto px-4">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Help & Support</h1>
-          <p className="text-blue-100">We helpen je graag verder met al je vragen</p>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-6">
-        {/* Search Bar */}
-        <div className="mb-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Zoek in veelgestelde vragen..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-            />
-          </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Page Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold mb-2">Help & Support</h1>
+          <p className="text-gray-600">We helpen je graag verder met al je vragen</p>
         </div>
 
-        {/* Quick Contact Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <a 
-            href="mailto:support@mijnwoningruil.nl"
-            className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Mail className="text-blue-600" size={20} />
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Email</h3>
-                <p className="text-sm text-gray-600">support@mijnwoningruil.nl</p>
-              </div>
+        <div className="space-y-6">
+          {/* Search Bar */}
+          <div className="mb-8">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Zoek in veelgestelde vragen..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent bg-white"
+              />
             </div>
-          </a>
-
-          <a 
-            href="tel:+31201234567"
-            className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Phone className="text-green-600" size={20} />
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Telefoon</h3>
-                <p className="text-sm text-gray-600">020 123 45 67</p>
-              </div>
-            </div>
-          </a>
-
-          <button className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <MessageCircle className="text-purple-600" size={20} />
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Live Chat</h3>
-                <p className="text-sm text-gray-600">Direct contact</p>
-              </div>
-            </div>
-          </button>
-        </div>
-
-        {/* FAQ Section */}
-        <div className="bg-white rounded-xl shadow-sm">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <FileText size={24} className="text-blue-600" />
-              Veelgestelde Vragen
-            </h2>
           </div>
 
-          <div className="divide-y divide-gray-200">
-            {filteredFAQ.map((category) => (
-              <div key={category.category}>
-                <button
-                  onClick={() => toggleCategory(category.category)}
-                  className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="text-blue-600">
-                      {category.icon}
-                    </div>
-                    <span className="font-medium text-left">{category.category}</span>
-                    <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">
-                      {category.questions.length}
-                    </span>
-                  </div>
-                  {expandedCategory === category.category ? 
-                    <ChevronUp size={20} className="text-gray-400" /> : 
-                    <ChevronDown size={20} className="text-gray-400" />
-                  }
-                </button>
-
-                {expandedCategory === category.category && (
-                  <div className="bg-gray-50">
-                    {category.questions.map((faq, index) => (
-                      <div key={index} className="border-t border-gray-200">
-                        <button
-                          onClick={() => toggleQuestion(`${category.category}-${index}`)}
-                          className="w-full p-4 text-left hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium text-gray-900">{faq.question}</span>
-                            {expandedQuestion === `${category.category}-${index}` ? 
-                              <ChevronUp size={16} className="text-gray-400 flex-shrink-0 ml-2" /> : 
-                              <ChevronDown size={16} className="text-gray-400 flex-shrink-0 ml-2" />
-                            }
-                          </div>
-                        </button>
-                        
-                        {expandedQuestion === `${category.category}-${index}` && (
-                          <div className="px-4 pb-4">
-                            <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Contact Form Section */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-4">Vraag niet gevonden?</h2>
-          <p className="text-gray-600 mb-6">Stuur ons een bericht en we helpen je zo snel mogelijk verder.</p>
-          
-          <form className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Naam</label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
-                  placeholder="Je volledige naam"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
-                  placeholder="je@email.com"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Onderwerp</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50">
-                <option>Selecteer een onderwerp</option>
-                <option>Technische problemen</option>
-                <option>Account vragen</option>
-                <option>Advertentie problemen</option>
-                <option>Betalingen</option>
-                <option>Veiligheid</option>
-                <option>Anders</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Bericht</label>
-              <textarea
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
-                placeholder="Beschrijf je vraag of probleem..."
-              ></textarea>
-            </div>
-            
-            <button
-              type="submit"
-              className="w-full sm:w-auto bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+          {/* Quick Contact Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <a 
+              href="mailto:support@mijnwoningruil.nl"
+              className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200"
             >
-              Verstuur bericht
-            </button>
-          </form>
-        </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-[#ffe361] rounded-lg">
+                  <Mail className="text-black" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900">Email</h3>
+                  <p className="text-sm text-gray-600">support@mijnwoningruil.nl</p>
+                </div>
+              </div>
+            </a>
 
-        {/* Additional Resources */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="font-semibold mb-2">Gebruikershandleiding</h3>
-            <p className="text-gray-600 text-sm mb-4">Leer hoe je het platform optimaal gebruikt</p>
-            <button className="text-blue-600 hover:underline text-sm font-medium">
-              Download PDF →
+            <a 
+              href="tel:+31201234567"
+              className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-[#ffe361] rounded-lg">
+                  <Phone className="text-black" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900">Telefoon</h3>
+                  <p className="text-sm text-gray-600">020 123 45 67</p>
+                </div>
+              </div>
+            </a>
+
+            <button className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-[#ffe361] rounded-lg">
+                  <MessageCircle className="text-black" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900">Live Chat</h3>
+                  <p className="text-sm text-gray-600">Direct contact</p>
+                </div>
+              </div>
             </button>
           </div>
-          
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="font-semibold mb-2">Video tutorials</h3>
-            <p className="text-gray-600 text-sm mb-4">Bekijk onze stap-voor-stap video&apos;s</p>
-            <button className="text-blue-600 hover:underline text-sm font-medium">
-              Bekijk video&apos;s →
-            </button>
+
+          {/* FAQ Section */}
+          <div className="bg-white rounded-xl shadow-sm">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <FileText size={24} className="text-black" />
+                Veelgestelde Vragen
+              </h2>
+            </div>
+
+            <div className="divide-y divide-gray-200">
+              {filteredFAQ.map((category) => (
+                <div key={category.category}>
+                  <button
+                    onClick={() => toggleCategory(category.category)}
+                    className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="text-black">
+                        {category.icon}
+                      </div>
+                      <span className="font-medium text-left">{category.category}</span>
+                      <span className="bg-[#ffe361] text-black text-xs px-2 py-1 rounded-full">
+                        {category.questions.length}
+                      </span>
+                    </div>
+                    {expandedCategory === category.category ? 
+                      <ChevronUp size={20} className="text-gray-400" /> : 
+                      <ChevronDown size={20} className="text-gray-400" />
+                    }
+                  </button>
+
+                  {expandedCategory === category.category && (
+                    <div className="bg-gray-50">
+                      {category.questions.map((faq, index) => (
+                        <div key={index} className="border-t border-gray-200">
+                          <button
+                            onClick={() => toggleQuestion(`${category.category}-${index}`)}
+                            className="w-full p-4 text-left hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-gray-900">{faq.question}</span>
+                              {expandedQuestion === `${category.category}-${index}` ? 
+                                <ChevronUp size={16} className="text-gray-400 flex-shrink-0 ml-2" /> : 
+                                <ChevronDown size={16} className="text-gray-400 flex-shrink-0 ml-2" />
+                              }
+                            </div>
+                          </button>
+                          
+                          {expandedQuestion === `${category.category}-${index}` && (
+                            <div className="px-4 pb-4">
+                              <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Form Section */}
+          <div className="mt-8 bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-xl font-semibold mb-4">Vraag niet gevonden?</h2>
+            <p className="text-gray-600 mb-6">Stuur ons een bericht en we helpen je zo snel mogelijk verder.</p>
+            
+            <form className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Naam</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent bg-gray-50"
+                    placeholder="Je volledige naam"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent bg-gray-50"
+                    placeholder="je@email.com"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Onderwerp</label>
+                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent bg-gray-50">
+                  <option>Selecteer een onderwerp</option>
+                  <option>Technische problemen</option>
+                  <option>Account vragen</option>
+                  <option>Advertentie problemen</option>
+                  <option>Betalingen</option>
+                  <option>Veiligheid</option>
+                  <option>Anders</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Bericht</label>
+                <textarea
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent bg-gray-50"
+                  placeholder="Beschrijf je vraag of probleem..."
+                ></textarea>
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full sm:w-auto bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800 focus:ring-2 focus:ring-[#ffe361] focus:ring-offset-2 transition-colors"
+              >
+                Verstuur bericht
+              </button>
+            </form>
+          </div>
+
+          {/* Additional Resources */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h3 className="font-semibold mb-2">Gebruikershandleiding</h3>
+              <p className="text-gray-600 text-sm mb-4">Leer hoe je het platform optimaal gebruikt</p>
+              <button className="text-black hover:underline text-sm font-medium">
+                Download PDF →
+              </button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h3 className="font-semibold mb-2">Video tutorials</h3>
+              <p className="text-gray-600 text-sm mb-4">Bekijk onze stap-voor-stap video's</p>
+              <button className="text-black hover:underline text-sm font-medium">
+                Bekijk video's →
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 } 

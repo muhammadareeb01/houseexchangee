@@ -1,0 +1,6 @@
+<svg width="100" height="30" viewBox="0 0 100 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="20" cy="15" rx="15" ry="8" fill="#4CAF50"/>
+  <circle cx="18" cy="12" r="2" fill="white"/>
+  <circle cx="22" cy="12" r="2" fill="white"/>
+  <text x="40" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#4CAF50">zooplus</text>
+</svg>

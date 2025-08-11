@@ -366,7 +366,7 @@ export default function MatchPage() {
             </p>
             <button
               onClick={() => setCurrentIndex(0)}
-              className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition shadow-md transform hover:-translate-y-1 active:translate-y-0"
+              className="bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition shadow-md transform hover:-translate-y-1 active:translate-y-0"
             >
               Opnieuw bekijken
             </button>

@@ -10,14 +10,14 @@ import {
   Check,
   CheckCheck,
   Clock,
-  ChevronDown,
-  ChevronUp,
+  MoreVertical,
   Home,
   MapPin,
   Users,
   Calendar,
   Euro,
-  RefreshCw
+  RefreshCw,
+  Flag
 } from 'lucide-react';
 import Image from 'next/image';
 import ExchangeRequestModal from '@/components/exchange/ExchangeRequestModal';
@@ -169,6 +169,20 @@ export default function ChatPage() {
     // 4. Show success message to sender
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showDropdown) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
+
   if (!conversation) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -187,14 +201,14 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Blue Header - Sticky */}
-      <div className="sticky top-0 z-30 bg-blue-600 text-white">
+      {/* Header - Sticky */}
+      <div className="sticky top-0 z-30 bg-black text-white">
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <button 
                 onClick={() => router.back()}
-                className="p-1 hover:bg-blue-700 rounded-full transition-colors"
+                className="p-1 hover:bg-gray-700 rounded-full transition-colors"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -217,60 +231,70 @@ export default function ChatPage() {
                 
                 <div>
                   <h1 className="font-semibold">{conversation.name}</h1>
-                  <p className="text-blue-100 text-sm">
+                  <p className="text-gray-300 text-sm">
                     {conversation.property.address}
                   </p>
                 </div>
               </div>
             </div>
             
-            <button
-              onClick={() => setShowDropdown(!showDropdown)}
-              className="p-2 hover:bg-blue-700 rounded-full transition-colors"
-            >
-              {showDropdown ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Dropdown Content */}
-        {showDropdown && (
-          <div className="bg-white border-t border-gray-200 shadow-lg">
-            <div className="p-4 space-y-4">
-              {/* Property Information */}
-              <div>
-                <h3 className="text-gray-800 font-semibold mb-2">
-                  Woninginformatie
-                </h3>
-                <div className="bg-gray-50 rounded-lg p-3 space-y-1 border border-gray-200 text-sm">
-                  <Link 
-                    href="/property/1" 
-                    className="text-blue-600 font-medium hover:text-blue-700 hover:underline transition-colors"
-                  >
-                    {conversation.property.address}
-                  </Link>
-                  <div className="text-gray-700">Type: <span className="font-medium">{conversation.property.type}</span></div>
-                  <div className="text-gray-700">Kamers: <span className="font-medium">{conversation.property.rooms}</span></div>
-                  <div className="text-gray-700">Grootte: <span className="font-medium">{conversation.property.size}</span></div>
-                  <div className="text-gray-700">Huur: <span className="font-medium">{conversation.property.rent}</span></div>
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="p-2 hover:bg-gray-700 rounded-full transition-colors"
+              >
+                <MoreVertical size={20} />
+              </button>
+              
+              {/* Dropdown Menu */}
+              {showDropdown && (
+                <div className="absolute right-0 top-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-50 whitespace-nowrap">
+                  <div className="py-2">
+                    <Link 
+                      href={`/property/1`}
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <Home size={16} className="mr-3" />
+                      Bekijk advertentie
+                    </Link>
+                    <button 
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      onClick={() => {
+                        // Handle block conversation
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <Users size={16} className="mr-3" />
+                      Blokkeer conversatie
+                    </button>
+                    <button 
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      onClick={() => {
+                        // Handle report user
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <Flag size={16} className="mr-3" />
+                      Gebruiker rapporteren
+                    </button>
+                    <button 
+                      className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      onClick={() => {
+                        // Handle remove from list
+                        setShowDropdown(false);
+                        router.push('/messages');
+                      }}
+                    >
+                      <RefreshCw size={16} className="mr-3" />
+                      Verwijder uit lijst
+                    </button>
+                  </div>
                 </div>
-              </div>
-
-              {/* Exchange Preferences */}
-              <div>
-                <h3 className="text-gray-800 font-semibold mb-2">
-                  Ruilvoorkeuren
-                </h3>
-                <div className="bg-gray-50 rounded-lg p-3 space-y-1 border border-gray-200 text-sm">
-                  <div className="text-gray-700">Gewenste locatie: <span className="font-medium">{conversation.property.preferences.location}</span></div>
-                  <div className="text-gray-700">Min. kamers: <span className="font-medium">{conversation.property.preferences.minRooms}</span></div>
-                  <div className="text-gray-700">Max. huur: <span className="font-medium">{conversation.property.preferences.maxRent}</span></div>
-                  <div className="text-gray-700">Type: <span className="font-medium">{conversation.property.preferences.type}</span></div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -293,7 +317,7 @@ export default function ChatPage() {
                   <div
                     className={`px-4 py-2 rounded-2xl ${
                       msg.isOwn
-                        ? 'bg-blue-600 text-white rounded-br-md'
+                        ? 'bg-gray-800 text-white rounded-br-md'
                         : 'bg-white text-gray-900 rounded-bl-md shadow-sm'
                     }`}
                   >
@@ -307,7 +331,7 @@ export default function ChatPage() {
                     {msg.isOwn && (
                       <>
                         {msg.isRead ? (
-                          <CheckCheck size={14} className="text-blue-500" />
+                          <CheckCheck size={14} className="text-gray-400" />
                         ) : (
                           <Check size={14} className="text-gray-400" />
                         )}
@@ -322,15 +346,7 @@ export default function ChatPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Floating Exchange Request Button */}
-      <div className="fixed bottom-24 right-4 z-10">
-        <button
-          onClick={handleSendExchangeRequest}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-full shadow-lg transition-colors font-medium text-sm"
-        >
-          <span>Stuur ruilverzoek</span>
-        </button>
-      </div>
+
 
       {/* Message Input - Sticky */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-20">
@@ -347,7 +363,7 @@ export default function ChatPage() {
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Typ een bericht..."
-              className="w-full px-4 py-3 bg-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors"
+              className="w-full px-4 py-3 bg-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-800 focus:bg-white transition-colors"
             />
             <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 transition-colors">
               <Smile size={18} />
@@ -359,7 +375,7 @@ export default function ChatPage() {
             disabled={!message.trim()}
             className={`p-3 rounded-full transition-colors ${
               message.trim()
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                ? 'bg-gray-800 text-white hover:bg-gray-700'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

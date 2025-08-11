@@ -206,7 +206,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('propertyType')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Woningtype</h4>
+            <h4 className="text-base font-medium text-black">Woningtype</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.propertyType ? 'rotate-180' : ''}`}
@@ -241,7 +241,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('price')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Huurprijs per maand (€)</h4>
+            <h4 className="text-base font-medium text-black">Huurprijs per maand (€)</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.price ? 'rotate-180' : ''}`}
@@ -252,7 +252,7 @@ const PropertyFilterSidebar = ({
             <div className="mt-3">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Minimum</label>
+                  <label className="block text-sm font-medium text-gray-700 opacity-60 mb-1">Minimum</label>
                   <input
                     type="number"
                     value={minPrice}
@@ -262,7 +262,7 @@ const PropertyFilterSidebar = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Maximum</label>
+                  <label className="block text-sm font-medium text-gray-700 opacity-60 mb-1">Maximum</label>
                   <input
                     type="number"
                     value={maxPrice}
@@ -282,7 +282,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('surface')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Oppervlakte (m²)</h4>
+            <h4 className="text-base font-medium text-black">Oppervlakte (m²)</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.surface ? 'rotate-180' : ''}`}
@@ -293,7 +293,7 @@ const PropertyFilterSidebar = ({
             <div className="mt-3">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Minimum</label>
+                  <label className="block text-sm font-medium text-gray-700 opacity-60 mb-1">Minimum</label>
                   <input
                     type="number"
                     value={minSize}
@@ -303,7 +303,7 @@ const PropertyFilterSidebar = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Maximum</label>
+                  <label className="block text-sm font-medium text-gray-700 opacity-60 mb-1">Maximum</label>
                   <input
                     type="number"
                     value={maxSize}
@@ -323,7 +323,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('rooms')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Aantal kamers</h4>
+            <h4 className="text-base font-medium text-black">Aantal kamers</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.rooms ? 'rotate-180' : ''}`}
@@ -333,14 +333,14 @@ const PropertyFilterSidebar = ({
           {expandedSections.rooms && (
             <div className="mt-3 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Totaal aantal kamers</label>
+                <label className="block text-sm font-medium text-gray-700 opacity-60 mb-2">Totaal aantal kamers</label>
                 <div className="flex w-full gap-2">
                   {['1', '2', '3', '4', '5', '6+'].map(option => (
                     <button
                       key={option}
                       onClick={() => setTotalRooms(totalRooms === option ? '' : option)}
                       className={`px-3 py-2 rounded-md text-sm font-medium flex-1 ${totalRooms === option 
-                        ? 'bg-blue-600 text-white' 
+                        ? 'bg-black text-white' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                     >
                       {option}
@@ -350,14 +350,14 @@ const PropertyFilterSidebar = ({
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Aantal slaapkamers</label>
+                <label className="block text-sm font-medium text-gray-700 opacity-60 mb-2">Aantal slaapkamers</label>
                 <div className="flex w-full gap-2">
                   {['1', '2', '3', '4', '5', '6+'].map(option => (
                     <button
                       key={option}
                       onClick={() => setBedrooms(bedrooms === option ? '' : option)}
                       className={`px-3 py-2 rounded-md text-sm font-medium flex-1 ${bedrooms === option 
-                        ? 'bg-blue-600 text-white' 
+                        ? 'bg-black text-white' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                     >
                       {option}
@@ -375,7 +375,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('outdoor')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Buitenruimte</h4>
+            <h4 className="text-base font-medium text-black">Buitenruimte</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.outdoor ? 'rotate-180' : ''}`}
@@ -388,7 +388,8 @@ const PropertyFilterSidebar = ({
                 <label key={feature.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 rounded"
+                    style={{ accentColor: '#000000' }}
                     checked={selectedFeatures.includes(feature.id)}
                     onChange={() => handleFeatureToggle(feature.id)}
                   />
@@ -405,7 +406,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('amenities')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Voorzieningen</h4>
+            <h4 className="text-base font-medium text-black">Voorzieningen</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.amenities ? 'rotate-180' : ''}`}
@@ -418,7 +419,8 @@ const PropertyFilterSidebar = ({
                 <label key={amenity.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 rounded"
+                    style={{ accentColor: '#000000' }}
                     checked={selectedAmenities.includes(amenity.id)}
                     onChange={() => handleAmenityToggle(amenity.id)}
                   />
@@ -435,7 +437,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('neighborhood')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Buurtkenmerken</h4>
+            <h4 className="text-base font-medium text-black">Buurtkenmerken</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.neighborhood ? 'rotate-180' : ''}`}
@@ -448,7 +450,8 @@ const PropertyFilterSidebar = ({
                 <label key={feature.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 rounded"
+                    style={{ accentColor: '#000000' }}
                     checked={selectedNeighborhoodFeatures.includes(feature.id)}
                     onChange={() => handleNeighborhoodToggle(feature.id)}
                   />
@@ -465,7 +468,7 @@ const PropertyFilterSidebar = ({
             onClick={() => toggleSection('location')}
             className="flex items-center justify-between w-full text-left"
           >
-            <h4 className="text-base font-medium text-blue-700">Ligging / bereikbaarheid</h4>
+            <h4 className="text-base font-medium text-black">Ligging / bereikbaarheid</h4>
             <ChevronDown 
               size={20} 
               className={`text-gray-500 transition-transform ${expandedSections.location ? 'rotate-180' : ''}`}
@@ -478,7 +481,8 @@ const PropertyFilterSidebar = ({
                 <label key={feature.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 rounded"
+                    style={{ accentColor: '#000000' }}
                     checked={selectedLocationFeatures.includes(feature.id)}
                     onChange={() => handleLocationToggle(feature.id)}
                   />

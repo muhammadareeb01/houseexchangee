@@ -84,7 +84,7 @@ const MessageModal: React.FC<MessageModalProps> = ({
               </button>
               <button
                 type="submit"
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400"
+                className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-400"
                 disabled={isSending}
               >
                 {isSending ? (

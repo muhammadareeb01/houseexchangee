@@ -7,9 +7,11 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { signInWithGoogle, signInWithFacebook } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,6 +21,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
 
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -98,6 +101,7 @@ export default function RegisterPage() {
 
       await sendEmailVerification(user, actionCodeSettings);
       setVerificationSent(true);
+      setShowEmailModal(false); // Close modal on success
 
       // router.push("/verify");
       // setVerificationSent(true);
@@ -117,9 +121,29 @@ export default function RegisterPage() {
     }
   };
 
+  const handleGoogleSignUp = async () => {
+    try {
+      await signInWithGoogle();
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Google sign up error:", error);
+      setError("Fout bij het registreren met Google");
+    }
+  };
+
+  const handleFacebookSignUp = async () => {
+    try {
+      await signInWithFacebook();
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Facebook sign up error:", error);
+      setError("Fout bij het registreren met Facebook");
+    }
+  };
+
   if (verificationSent) {
     return (
-      <main className="min-h-screen flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-100 pt-8">
+      <main className="min-h-screen flex flex-col items-center bg-gray-50 pt-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -167,14 +191,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-100 pt-8">
+    <main className="min-h-screen flex flex-col items-center bg-gray-50 pt-8">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Account aanmaken
           </h1>
           <p className="text-gray-600">
-            Vul je gegevens in om een nieuw account te maken
+            Kies hoe je een account wilt aanmaken
           </p>
         </div>
         <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
@@ -183,93 +207,60 @@ export default function RegisterPage() {
               <p className="text-red-600 text-sm">{error}</p>
             </div>
           )}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Volledige naam
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-gray-50"
-                placeholder="Bijv. Jan de Vries"
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                E-mailadres
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  handleInputChange("email", e.target.value.toLowerCase())
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-gray-50"
-                placeholder="naam@example.com"
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Wachtwoord
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-gray-50"
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Bevestig wachtwoord
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={(e) =>
-                  handleInputChange("confirmPassword", e.target.value)
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-gray-50"
-                required
-                disabled={isLoading}
-              />
-            </div>
+          
+          {/* Social Login Buttons */}
+          <div className="mb-6 space-y-3">
             <button
-              type="submit"
+              onClick={handleGoogleSignUp}
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition-colors duration-200"
+              className="w-full flex items-center justify-center bg-white text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Account aanmaken..." : "Account aanmaken"}
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Registreren met Google
             </button>
-          </form>
+            <button
+              onClick={handleFacebookSignUp}
+              disabled={isLoading}
+              className="w-full flex items-center justify-center bg-white text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-5 h-5 mr-2" fill="#1877F2" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Registreren met Facebook
+            </button>
+          </div>
+          
+          {/* Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">of</span>
+            </div>
+          </div>
+          
+          {/* Email Registration Button */}
+          <button
+            onClick={() => setShowEmailModal(true)}
+            disabled={isLoading}
+            className="w-full flex items-center justify-center bg-white text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+            Registreren met e-mailadres
+          </button>
+          
           <div className="text-center mt-6 pt-6 border-t border-gray-200">
             <span className="text-gray-600">Al een account? </span>
             <a
-              href="/auth/sigin"
+              href="/auth/signin"
               className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
             >
               Log hier in
@@ -277,6 +268,124 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
+
+      {/* Email Registration Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Registreren met e-mailadres
+                </h2>
+                <button
+                  onClick={() => setShowEmailModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label
+                    htmlFor="modal-name"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Volledige naam
+                  </label>
+                  <input
+                    id="modal-name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent text-gray-900 bg-gray-50"
+                    placeholder="Bijv. Jan de Vries"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="modal-email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    E-mailadres
+                  </label>
+                  <input
+                    id="modal-email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleInputChange("email", e.target.value.toLowerCase())
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent text-gray-900 bg-gray-50"
+                    placeholder="naam@example.com"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="modal-password"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Wachtwoord
+                  </label>
+                  <input
+                    id="modal-password"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent text-gray-900 bg-gray-50"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="modal-confirmPassword"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Bevestig wachtwoord
+                  </label>
+                  <input
+                    id="modal-confirmPassword"
+                    type="password"
+                    value={formData.confirmPassword}
+                    onChange={(e) =>
+                      handleInputChange("confirmPassword", e.target.value)
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffe361] focus:border-transparent text-gray-900 bg-gray-50"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowEmailModal(false)}
+                    className="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                  >
+                    Annuleren
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#ffe361] focus:ring-offset-2 disabled:opacity-50 transition-colors duration-200"
+                  >
+                    {isLoading ? "Aanmaken..." : "Account aanmaken"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

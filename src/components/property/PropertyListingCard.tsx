@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { MapPin, Home, Euro, Eye, Edit } from 'lucide-react';
+import { MapPin, Home, Euro, Eye } from 'lucide-react';
 
 interface PropertyListingCardProps {
   property: {
@@ -21,13 +21,15 @@ interface PropertyListingCardProps {
   showActionButtons?: boolean;
   onToggleExchangeProcess?: () => void;
   onEditClick?: () => void;
+  isOwnListing?: boolean;
 }
 
 const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
   property,
   showActionButtons = true,
   onToggleExchangeProcess,
-  onEditClick
+  onEditClick,
+  isOwnListing = false
 }) => {
   const router = useRouter();
   
@@ -46,7 +48,7 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
           {/* Status Badge */}
           {property.status && (
             <div className="absolute top-3 left-3">
-              <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full">
+              <span className="px-3 py-1 bg-[#ffe361] text-black text-sm font-medium rounded-full">
                 {property.status}
               </span>
             </div>
@@ -76,7 +78,7 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
                     checked={property.inExchangeProcess}
                     onChange={onToggleExchangeProcess}
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
             )}
@@ -103,18 +105,11 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
             {showActionButtons && (
               <div className="flex flex-col sm:flex-row gap-2 md:gap-3 sm:justify-end mt-auto">
                 <button 
-                  onClick={() => router.push(`/property/${property.id}`)}
-                  className="flex items-center justify-center gap-2 py-2 px-3 md:px-4 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition w-full sm:w-auto"
+                  onClick={() => router.push(isOwnListing ? '/profile/my-listings' : `/property/${property.id}`)}
+                  className="flex items-center justify-center gap-2 py-2 px-3 md:px-4 text-sm bg-[#ffe361] text-black rounded-lg hover:bg-[#f5d95a] transition w-full sm:w-auto font-medium"
                 >
                   <Eye size={16} />
                   <span>Bekijken</span>
-                </button>
-                <button 
-                  onClick={onEditClick ? onEditClick : () => router.push(`/profile/my-listings/edit/${property.id}`)}
-                  className="flex items-center justify-center gap-2 py-2 px-3 md:px-4 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition w-full sm:w-auto"
-                >
-                  <Edit size={16} />
-                  <span>Bewerken</span>
                 </button>
               </div>
             )}

@@ -17,6 +17,7 @@ export interface PropertyCardProps {
   type?: string;
   noShadow?: boolean;
   features?: string[];
+  hideFeatures?: boolean;
 }
 
 const PropertyCard = ({
@@ -31,6 +32,7 @@ const PropertyCard = ({
   type,
   noShadow = false,
   features = [],
+  hideFeatures = false,
 }: PropertyCardProps) => {
   const [favorite, setFavorite] = useState(isFavorite);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -134,10 +136,10 @@ const PropertyCard = ({
         </div>
         
         {/* Feature tags */}
-        {features.length > 0 && (
+        {features.length > 0 && !hideFeatures && (
           <div className="flex flex-wrap gap-1.5 mb-3">
             {features.map((feature, index) => (
-              <span key={index} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-medium">
+              <span key={index} className="bg-[#ffe361]/20 text-[#ffe361] px-2 py-0.5 rounded-full text-xs font-medium border border-[#ffe361]/30">
                 {feature}
               </span>
             ))}

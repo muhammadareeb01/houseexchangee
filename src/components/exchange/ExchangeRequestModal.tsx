@@ -194,7 +194,7 @@ const ExchangeRequestModal: React.FC<ExchangeRequestModalProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
                   disabled={isSending}
                 >
                   {isSending ? (
